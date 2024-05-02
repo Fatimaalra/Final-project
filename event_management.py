@@ -1183,8 +1183,473 @@ class EventManagementApp(tk.Tk):
             all_details += i.details()
         self.output_text.insert(tk.END, all_details)
 
+    def modify_employee(self):
+        employee_id = self.employee_id_entry.get()
+        if employee_id != "":
 
-        
+            emp = self.EventManagementSystem.getEmployeeByID(employee_id)
+
+            if emp == False:
+                print("Employee Not Found")
+                return
+            name,employee_id,department,job_title,basic_salary,age,date_of_birth,passport_details = emp.get_name(),emp.get_employee_id(), emp.get_department(),emp.get_job_title(),emp.get_basic_salary(), emp.get_age(), emp.get_date_of_birth(),emp.get_passport_details()
+
+            new_window = tk.Toplevel(self)
+            new_window.geometry("350x500")
+            new_window.title("Update Employee")
+
+            # Dropdown menu for job titles
+            job_titles = [
+                "Sales Managers",
+                "Salespersons",
+                "Marketing Managers",
+                "Marketers",
+                "Accountants",
+                "Designers",
+                "Handymen"
+            ]
+            selected_job = tk.StringVar(new_window)
+            selected_job.set(job_titles[0])  # Default value
+            job_label = tk.Label(new_window, text=job_title)
+            job_label.pack()
+            job_dropdown = tk.OptionMenu(new_window, selected_job, *job_titles)
+            job_dropdown.pack()
+
+            # Name
+            name_label = tk.Label(new_window, text="Name:")
+            name_label.pack()
+            name_entry = tk.Entry(new_window)
+            name_entry.insert(0, name)
+            name_entry.pack()
+
+            # Employee ID
+            employee_id_label = tk.Label(new_window, text="Employee ID:")
+            employee_id_label.pack()
+            employee_id_entry = tk.Entry(new_window)
+            employee_id_entry.insert(0, employee_id)
+            employee_id_entry.pack()
+
+            # Department
+            department_label = tk.Label(new_window, text="Department:")
+            department_label.pack()
+            department_entry = tk.Entry(new_window)
+            department_entry.insert(0, department)
+            department_entry.pack()
+
+            # Basic Salary
+            basic_salary_label = tk.Label(new_window, text="Basic Salary:")
+            basic_salary_label.pack()
+            basic_salary_entry = tk.Entry(new_window)
+            basic_salary_entry.insert(0, basic_salary)
+            basic_salary_entry.pack()
+
+            # Age
+            age_label = tk.Label(new_window, text="Age:")
+            age_label.pack()
+            age_entry = tk.Entry(new_window)
+            age_entry.insert(0, age)
+            age_entry.pack()
+
+            # Date of Birth
+            dob_label = tk.Label(new_window, text="Date of Birth:")
+            dob_label.pack()
+            dob_entry = tk.Entry(new_window)
+            dob_entry.insert(0,date_of_birth)
+            dob_entry.pack()
+
+            # Passport Details
+            passport_label = tk.Label(new_window, text="Passport Details:")
+            passport_label.pack()
+            passport_entry = tk.Entry(new_window)
+            passport_entry.insert(0, passport_details)
+            passport_entry.pack()
+
+            # Passport Details
+            manager_id = tk.Label(new_window, text="Manager ID:")
+            manager_id.pack()
+            manager_id_entry = tk.Entry(new_window)
+            manager_id_entry.insert(0, manager_id)
+            manager_id_entry.pack()
+
+            self.EventManagementSystem.removeEmployeeByID(employee_id)
+
+            # Button to add employee
+            add_button = tk.Button(new_window, text="Update",
+                                   command=lambda: self.EventManagementSystem.add_employee(
+                                       selected_job.get(),
+                                       name_entry.get(),
+                                       employee_id_entry.get(),
+                                       department_entry.get(),
+                                       basic_salary_entry.get(),
+                                       age_entry.get(),
+                                       dob_entry.get(),
+                                       passport_entry.get(),
+                                       manager_id_entry.get()
+                                   ))
+            add_button.pack()
+
+    def modify_event(self):
+        event_id = self.event_id_entry.get()
+        if event_id != "":
+            event = self.EventManagementSystem.getEventByID(event_id)
+
+            if event == False:
+                print("Event Not Found")
+                return
+
+            eventID,eventType,theme,date,time,duration,venueAddress,clientID,invoice = event.getEventID(),event.getEventType(),event.getTheme(),event.getDate(),event.getTime(),event.getDuration(),event.getVenueAddress(),event.getClientID(),event.getInvoice()
+
+
+            new_window = tk.Toplevel(self)
+            new_window.geometry("350x600")
+            new_window.title("Update Event")
+
+            # Event ID
+            event_id_label = tk.Label(new_window, text="Event ID:")
+            event_id_label.pack()
+            event_id_entry = tk.Entry(new_window)
+            event_id_entry.insert(0,eventID)
+            event_id_entry.pack()
+
+            # Event Type
+            event_type_label = tk.Label(new_window, text="Event Type:")
+            event_type_label.pack()
+            event_type_entry = tk.Entry(new_window)
+            event_type_entry.insert(0,eventType)
+            event_type_entry.pack()
+
+            # Theme
+            theme_label = tk.Label(new_window, text="Theme:")
+            theme_label.pack()
+            theme_entry = tk.Entry(new_window)
+            theme_entry.insert(0, theme)
+            theme_entry.pack()
+
+            # Date
+            date_label = tk.Label(new_window, text="Date:")
+            date_label.pack()
+            date_entry = tk.Entry(new_window)
+            date_entry.insert(0, date)
+            date_entry.pack()
+
+            # Time
+            time_label = tk.Label(new_window, text="Time:")
+            time_label.pack()
+            time_entry = tk.Entry(new_window)
+            time_entry.insert(time)
+            time_entry.pack()
+
+            # Duration
+            duration_label = tk.Label(new_window, text="Duration:")
+            duration_label.pack()
+            duration_entry = tk.Entry(new_window)
+            duration_entry.insert(0,duration)
+            duration_entry.pack()
+
+            # Venue Address
+            venue_label = tk.Label(new_window, text="Venue Address:")
+            venue_label.pack()
+            venue_entry = tk.Entry(new_window)
+            venue_entry.insert(0,venueAddress)
+            venue_entry.pack()
+
+            # Client ID
+            client_id_label = tk.Label(new_window, text="Client ID:")
+            client_id_label.pack()
+            client_id_entry = tk.Entry(new_window)
+            client_id_entry.insert(0, clientID)
+            client_id_entry.pack()
+
+            # Invoice
+            invoice_label = tk.Label(new_window, text="Invoice:")
+            invoice_label.pack()
+            invoice_entry = tk.Entry(new_window)
+            invoice_entry.insert(0, invoice)
+            invoice_entry.pack()
+
+            self.EventManagementSystem.removeEventByID(eventID)
+
+            # Button to add event
+            add_button = tk.Button(new_window, text="Add Event", command=lambda: self.EventManagementSystem.add_event(
+                event_id_entry.get(),
+                event_type_entry.get(),
+                theme_entry.get(),
+                date_entry.get(),
+                time_entry.get(),
+                duration_entry.get(),
+                venue_entry.get(),
+                client_id_entry.get(),
+                invoice_entry.get()
+            ))
+            add_button.pack()
+
+    def modify_client(self):
+        client_id = self.client_id_entry.get()
+        if client_id != "":
+            client = self.EventManagementSystem.getClientByID(client_id)
+
+            if client == False:
+                print("Client Not Found")
+                return
+
+            clientID,name,address,contactDetails,budget = client.getClientID(), client.getName(),client.getAddress(),client.getContactDetails(),client.getBudget()
+
+            new_window = tk.Toplevel(self)
+            new_window.geometry("350x400")
+            new_window.title("Update Client")
+
+            # Client ID
+            client_id_label = tk.Label(new_window, text="Client ID:")
+            client_id_label.pack()
+            client_id_entry = tk.Entry(new_window)
+            client_id_entry.insert(0, clientID)
+            client_id_entry.pack()
+
+            # Name
+            name_label = tk.Label(new_window, text="Name:")
+            name_label.pack()
+            name_entry = tk.Entry(new_window)
+            name_entry.insert(0, name)
+            name_entry.pack()
+
+            # Address
+            address_label = tk.Label(new_window, text="Address:")
+            address_label.pack()
+            address_entry = tk.Entry(new_window)
+            address_entry.insert(0, address)
+            address_entry.pack()
+
+            # Contact Details
+            contact_label = tk.Label(new_window, text="Contact Details:")
+            contact_label.pack()
+            contact_entry = tk.Entry(new_window)
+            contact_entry.insert(0, contactDetails)
+            contact_entry.pack()
+
+            # Budget
+            budget_label = tk.Label(new_window, text="Budget:")
+            budget_label.pack()
+            budget_entry = tk.Entry(new_window)
+            budget_entry.insert(0, budget)
+            budget_entry.pack()
+
+            self.EventManagementSystem.removeClientByID(clientID)
+
+            # Button to add client
+            add_button = tk.Button(new_window, text="Add Client", command=lambda: self.EventManagementSystem.add_client(
+                client_id_entry.get(),
+                name_entry.get(),
+                address_entry.get(),
+                contact_entry.get(),
+                budget_entry.get()
+            ))
+            add_button.pack()
+
+    def modify_guest(self):
+        guest_id = self.guest_id_entry.get()
+        if guest_id != "":
+            guest = self.EventManagementSystem.getGuestByID(guest_id)
+
+            if guest == False:
+                print("Guest Not Found")
+                return
+
+            guestID,name,address,contactDetails = guest.getGuestID(),guest.getName(),guest.getAddress(),guest.getContactDetails()
+
+            new_window = tk.Toplevel(self)
+            new_window.geometry("350x400")
+            new_window.title("Update Guest")
+
+            # Guest ID
+            guest_id_label = tk.Label(new_window, text="Guest ID:")
+            guest_id_label.pack()
+            guest_id_entry = tk.Entry(new_window)
+            guest_id_entry.insert(0, guestID)
+            guest_id_entry.pack()
+
+            # Name
+            name_label = tk.Label(new_window, text="Name:")
+            name_label.pack()
+            name_entry = tk.Entry(new_window)
+            name_entry.insert(0, name)
+            name_entry.pack()
+
+            # Address
+            address_label = tk.Label(new_window, text="Address:")
+            address_label.pack()
+            address_entry = tk.Entry(new_window)
+            address_entry.insert(0 , address)
+            address_entry.pack()
+
+            # Contact Details
+            contact_label = tk.Label(new_window, text="Contact Details:")
+            contact_label.pack()
+            contact_entry = tk.Entry(new_window)
+            contact_entry.insert(0, contactDetails)
+            contact_entry.pack()
+
+            self.EventManagementSystem.removeGuestByID(guestID)
+
+            # Button to add guest
+            add_button = tk.Button(new_window, text="Add Guest", command=lambda: self.EventManagementSystem.add_guest(
+                guest_id_entry.get(),
+                name_entry.get(),
+                address_entry.get(),
+                contact_entry.get()
+            ))
+            add_button.pack()
+
+    def modify_supplier(self):
+        supplier_id = self.supplier_id_entry.get()
+        if supplier_id != "":
+            supplier = self.EventManagementSystem.getSupplierByID(supplier_id)
+
+            if supplier == False:
+                print("Supplier Not Found")
+                return
+
+            name ,addres,contact,id, supplier_type = supplier.getName(), supplier.getAddress(), supplier.getContact(), supplier.getId(), supplier.getSupplierType()
+
+
+            new_window = tk.Toplevel(self)
+            new_window.geometry("350x500")
+            new_window.title("Update Supplier")
+            self.output_text.insert(tk.END, "Adding Supplier...\n")
+
+            # Dropdown menu for job titles
+            supplier_types = [
+                "catering", "decorations",
+                "cleaning", "furniture"
+            ]
+            selected_supplier = tk.StringVar(new_window)
+            selected_supplier.set(supplier_types[0])
+            supplier_types_label = tk.Label(new_window, text=supplier_type)
+            supplier_types_label.pack()
+            supplier_dropdown = tk.OptionMenu(new_window, selected_supplier, *supplier_types)
+            supplier_dropdown.pack()
+
+            # Name
+            name_label = tk.Label(new_window, text="Name:")
+            name_label.pack()
+            name_entry = tk.Entry(new_window)
+            name_entry.insert(0, name)
+            name_entry.pack()
+
+            # Address
+            address_label = tk.Label(new_window, text="Address:")
+            address_label.pack()
+            address_entry = tk.Entry(new_window)
+            address_entry.insert(0, addres)
+            address_entry.pack()
+
+            # Contact
+            contact_label = tk.Label(new_window, text="Contact:")
+            contact_label.pack()
+            contact_entry = tk.Entry(new_window)
+            contact_entry.insert(0,contact)
+            contact_entry.pack()
+
+            self.EventManagementSystem.removeSupplierByID(supplier_id)
+
+            # Button to add guest
+            add_supplier = tk.Button(new_window, text="Add Supplier",
+                                     command=lambda: self.EventManagementSystem.add_supplier(
+                                         selected_supplier.get(),
+                                         name_entry.get(),
+                                         address_entry.get(),
+                                         contact_entry.get()
+                                     ))
+            add_supplier.pack()
+
+
+    def delete_employee(self):
+        employee_id = self.employee_id_entry.get()
+        if employee_id != "":
+
+            self.EventManagementSystem.removeEmployeeByID(employee_id)
+        else:
+            print("please provide employee id.")
+
+
+    def delete_event(self):
+        event_id = self.event_id_entry.get()
+        if event_id != "":
+            self.EventManagementSystem.removeEventByID(event_id)
+        else:
+            print("please provide event id.")
+
+    def delete_client(self):
+        client_id = self.client_id_entry.get()
+        if client_id != "":
+            self.EventManagementSystem.removeClientByID(client_id)
+        else:
+            print("please enter client id.")
+
+    def delete_guest(self):
+        guest_id = self.guest_id_entry.get()
+        if guest_id != "":
+            self.EventManagementSystem.removeGuestByID(guest_id)
+        else:
+            print("please provide guest id.")
+
+    def delete_supplier(self):
+        supplier_id = self.supplier_id_entry.get()
+        if supplier_id != "":
+            self.EventManagementSystem.removeSupplierByID(supplier_id)
+        else:
+            print("please provide supplier id.")
+
+    def AddGuestIntoEvent(self):
+        event_id = self.e1_event.get()
+        guest_id = self.e2_guest.get()
+        res = self.EventManagementSystem.AddGuestIntoEvent(event_id,guest_id)
+        if res:
+            self.output_text.insert(tk.END, "\nGuest with ID {} added into Event ID {}".format(guest_id,event_id))
+        else:
+            self.output_text.insert(tk.END, "\nWrong information provided")
+
+    def ShowAllGuestsOfEvent(self):
+        event_id = self.e2_event.get()
+        event = self.EventManagementSystem.getEventByID(event_id)
+        self.output_text.delete('1.0', tk.END)
+        if event:
+            msg = ""
+            guests = event.getGuestList()
+            for guest in guests:
+                guest_id = guest.getGuestID()
+                guest_name = guest.getName()
+                msg += "Guest ID : {}\t\tGuest Name : {}\n".format(guest_id,guest_name)
+
+            if len(guests) == 0:
+                self.output_text.insert(tk.END, "\nNo Guests Found" )
+            else:
+                self.output_text.insert(tk.END, "\n"+msg)
+
+        else:
+            self.output_text.insert(tk.END, "\nWrong information provided")
+
+    def AddSupplierToEvent(self):
+        event_id = self.e3_event.get()
+        supplier_id = self.e4_supplier.get()
+
+        event = self.EventManagementSystem.getEventByID(event_id)
+        supplier = self.EventManagementSystem.getSupplierByID(supplier_id)
+
+        if event != False and supplier != False:
+            if type(supplier) == CateringSupplier:
+                event.setCateringCompany(supplier)
+            elif type(supplier) == CleaningSupplier:
+                event.setCleaningCompany(supplier)
+            elif type(supplier) == FurnitureSupplier:
+                event.setFurnitureSupplyCompany(supplier)
+            elif type(supplier) == DecorationsSupplier:
+                event.setDecorationsCompany(supplier)
+
+            self.output_text.insert(tk.END, "\nSupplier with ID {} added for Event with ID {}".format(supplier_id,event_id))
+
+        else:
+            self.output_text.insert(tk.END, "\nWrong information provided")
+
 if __name__ == "__main__":
     app = EventManagementApp()
     app.mainloop()
