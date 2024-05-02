@@ -1,7 +1,5 @@
 
 
-
-
 import tkinter as tk
 import pickle
 
@@ -664,3 +662,529 @@ class FurnitureSupplier(Supplier):
     pass
 
 
+
+
+
+
+
+
+class EventManagementApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Event Management System")
+        self.geometry("950x600")
+        self.configure(bg="lightgray")
+
+        self.EventManagementSystem = EventManagementSystem("MyEventManagement","Fatima Alrashdi")
+
+        # Creating Employees
+        sm = SalesManager("Nora","3","Sales","Sales Manager","20000","32","1/1/1994","PP6752383")
+        sp1 = Salesperson("Sales Person 1","1","Sales","Sales Person","10000","30","1/1/1995","PP123456","3")
+        sp2 = Salesperson("Sales Person 2", "2", "Sales", "Sales Person", "10000", "30", "1/1/1995", "PP867878", "3")
+        accountant = Accountant("Salem","4","Accounts","Accountant","18000","32","1/1/1994","PP87517239")
+
+        self.EventManagementSystem.employees.extend([sm,sp1,sp2,accountant])
+
+        # Creating Events
+        event1 = Wedding("1","Weeding","Theme1","5/2/2024","8PM","2 hours","UAE","1","50000")
+        event2 = Birthday("2", "Birthday", "Batman", "5/2/2024", "5PM", "2 hours", "UAE", "2", "10000")
+        event3 = Graduation("3", "Graduation", "Theme3", "5/2/2024", "2PM", "2 hours", "UAE", "3", "20000")
+
+        self.EventManagementSystem.events.extend([event1,event2,event3])
+
+        # Creating clients
+        client1 = Client("1","Khaled","Street 1 Dubai","3457394793","50000")
+        client2 = Client("2", "Mariam", "Street 2 Dubai", "97932484", "10000")
+        client3 = Client("3", "Aisha", "Street 3 Dubai", "12234939", "20000")
+
+        self.EventManagementSystem.clients.extend([client1,client2,client3])
+
+        # creating guests
+        guest1 = Guest("1","Fatima","Street 4 Dubai","3423434")
+        guest2 = Guest("2", "Hamdan", "Street 5 Dubai", "34234499")
+        guest3 = Guest("3", "Amna", "Street 6 Dubai", "5432234")
+        guest4 = Guest("4", "Alya", "Street 7 Dubai", "8688797")
+        guest5 = Guest("5", "Mahra", "Street 8 Dubai", "3423434")
+
+        self.EventManagementSystem.guests.extend([guest1,guest2,guest3,guest4,guest5])
+
+        # creating suppliers
+        supplier1 = CateringSupplier("1","Catering Supplier","UAE","43454345","catering")
+        supplier2 = CleaningSupplier("2", "Cleaning Supplier", "UAE", "753465", "cleaning")
+        supplier3 = DecorationsSupplier("3", "Decoration Supplier", "UAE", "2343564", "decoration")
+        supplier4 = FurnitureSupplier("4", "Furniture Supplier", "UAE", "87967980", "furniture")
+
+        self.EventManagementSystem.cateringCompanies.append(supplier1)
+        self.EventManagementSystem.cleaningCompanies.append(supplier2)
+        self.EventManagementSystem.decorationsCompanies.append(supplier3)
+        self.EventManagementSystem.furnitureSupplyCompanies.append(supplier4)
+
+
+
+
+        # Create and configcre the title label with a black border
+        title_label = tk.Label(self, text="Event Management System", font=("Arial", 18), bg="white", bd=8)
+        title_label.place(relx=0.5, rely=0.01, anchor="n")
+
+        labels_names = ["Employees","Events","Clients","Guests","Suppliers"]
+        labels_rely = 0.15
+        for i in range(0, 5):
+            label = tk.Label(self, text=f"{labels_names[i]} :", font=("Arial", 12), bg="white", fg="black")
+            label.place(relx=0.02, rely=labels_rely, anchor="w")
+            labels_rely += 0.1
+
+        # Buttons
+        buttons_rely = 0.15
+        button_functions = [self.add_Employee_window, self.add_Event_window, self.add_Client_window, self.add_Guest_window, self.add_Supplier_window]
+        for i in range(0, 5):
+            button = tk.Button(self, text=f"Add", command=button_functions[i])
+            button.place(relx=0.15, rely=buttons_rely, anchor="w",width=50)
+            buttons_rely += 0.1
+
+
+        # Buttons
+        buttons_rely = 0.15
+        display_functions = [self.display_employees, self.display_events, self.display_clients, self.display_guests, self.display_suppliers]
+        for i in range(0, 5):
+            button = tk.Button(self, text=f"Display All", command=display_functions[i])
+            button.place(relx=0.55, rely=buttons_rely, anchor="w",width=80)
+            buttons_rely += 0.1
+
+        # Buttons
+        buttons_rely = 0.15
+        modify_functions = [self.modify_employee, self.modify_event, self.modify_client, self.modify_guest, self.modify_supplier]
+        for i in range(0, 5):
+            button = tk.Button(self, text=f"Modify", command=modify_functions[i])
+            button.place(relx=0.35, rely=buttons_rely, anchor="w",width=80)
+            buttons_rely += 0.1
+
+        # Buttons
+        buttons_rely = 0.15
+        delete_functions = [self.delete_employee, self.delete_event, self.delete_client, self.delete_guest, self.delete_supplier]
+        for i in range(0, 5):
+            button = tk.Button(self, text=f"Delete", command=delete_functions[i])
+            button.place(relx=0.45, rely=buttons_rely, anchor="w",width=80)
+            buttons_rely += 0.1
+
+
+        self.employee_id_entry = tk.Entry(self, width=10)
+        self.employee_id_entry.insert(0, "")
+        self.employee_id_entry.place(relx=0.25, rely=0.15, anchor="w")
+
+        self.event_id_entry = tk.Entry(self, width=10)
+        self.event_id_entry.insert(0, "")
+        self.event_id_entry.place(relx=0.25, rely=0.25, anchor="w")
+
+        self.client_id_entry = tk.Entry(self, width=10)
+        self.client_id_entry.insert(0, "")
+        self.client_id_entry.place(relx=0.25, rely=0.35, anchor="w")
+
+        self.guest_id_entry = tk.Entry(self, width=10)
+        self.guest_id_entry.insert(0, "")
+        self.guest_id_entry.place(relx=0.25, rely=0.45, anchor="w")
+
+        self.supplier_id_entry = tk.Entry(self, width=10)
+        self.supplier_id_entry.insert(0, "")
+        self.supplier_id_entry.place(relx=0.25, rely=0.55, anchor="w")
+
+        level_event = tk.Label(self, text="Event ID")
+        label_guest = tk.Label(self, text="Guest ID")
+
+        level_event.place(relx=0.02, rely=0.65, anchor="w")
+        label_guest.place(relx=0.1, rely=0.65, anchor="w")
+
+
+        self.e1_event = tk.Entry(self, width=10)
+        self.e1_event.insert(0, "")
+        self.e1_event.place(relx=0.02, rely=0.7, anchor="w")
+
+        self.e2_guest = tk.Entry(self, width=10)
+        self.e2_guest.insert(0, "")
+        self.e2_guest.place(relx=0.1, rely=0.7, anchor="w")
+
+        self.add_guest_to_event = tk.Button(self, text="Add Guest into Event", command=self.AddGuestIntoEvent)
+        self.add_guest_to_event.place(relx=0.25, rely=0.7, anchor="center")
+
+        self.show_all_event_guests = tk.Button(self, text="Show all Event Guests", command=self.ShowAllGuestsOfEvent)
+        self.show_all_event_guests.place(relx=0.25, rely=0.8, anchor="center")
+
+        label_event2 = tk.Label(self, text="Event ID")
+        label_event2.place(relx=0.02, rely=0.75, anchor="w")
+
+        self.e2_event = tk.Entry(self, width=10)
+        self.e2_event.insert(0, "")
+        self.e2_event.place(relx=0.02, rely=0.8, anchor="w")
+
+        label_event3 = tk.Label(self, text="Event ID")
+        label_event3.place(relx=0.02, rely=0.85, anchor="w")
+
+        self.e3_event = tk.Entry(self, width=10)
+        self.e3_event.insert(0, "")
+        self.e3_event.place(relx=0.02, rely=0.9, anchor="w")
+
+        label_supplier = tk.Label(self, text="Supplier ID")
+        label_supplier.place(relx=0.1, rely=0.85, anchor="w")
+
+        self.e4_supplier = tk.Entry(self, width=10)
+        self.e4_supplier.insert(0, "")
+        self.e4_supplier.place(relx=0.1, rely=0.9, anchor="w")
+
+        self.add_supplier_to_event = tk.Button(self, text="Add Supplier to Event", command=self.AddSupplierToEvent)
+        self.add_supplier_to_event.place(relx=0.25, rely=0.9, anchor="center")
+
+        label = tk.Label(self, text="Output Window", font=("Arial", 12), bg="white", fg="black")
+        label.place(relx=0.88, rely=0.13, anchor="ne")
+
+        # Output text area
+        self.output_text = tk.Text(self, wrap="word", width=38, height=28)
+        self.output_text.place(relx=0.98, rely=0.19, anchor="ne")
+
+    def add_Employee_window(self):
+        new_window = tk.Toplevel(self)
+        new_window.geometry("350x500")
+        new_window.title("Add Employee")
+
+        # Dropdown menu for job titles
+        job_titles = [
+            "Sales Managers",
+            "Salespersons",
+            "Marketing Managers",
+            "Marketers",
+            "Accountants",
+            "Designers",
+            "Handymen"
+        ]
+        selected_job = tk.StringVar(new_window)
+        selected_job.set(job_titles[0])  # Default value
+        job_label = tk.Label(new_window, text="Select Employee Type")
+        job_label.pack()
+        job_dropdown = tk.OptionMenu(new_window, selected_job, *job_titles)
+        job_dropdown.pack()
+
+        # Name
+        name_label = tk.Label(new_window, text="Name:")
+        name_label.pack()
+        name_entry = tk.Entry(new_window)
+        name_entry.pack()
+
+        # Employee ID
+        employee_id_label = tk.Label(new_window, text="Employee ID:")
+        employee_id_label.pack()
+        employee_id_entry = tk.Entry(new_window)
+        employee_id_entry.pack()
+
+        # Department
+        department_label = tk.Label(new_window, text="Department:")
+        department_label.pack()
+        department_entry = tk.Entry(new_window)
+        department_entry.pack()
+
+        # Basic Salary
+        basic_salary_label = tk.Label(new_window, text="Basic Salary:")
+        basic_salary_label.pack()
+        basic_salary_entry = tk.Entry(new_window)
+        basic_salary_entry.pack()
+
+        # Age
+        age_label = tk.Label(new_window, text="Age:")
+        age_label.pack()
+        age_entry = tk.Entry(new_window)
+        age_entry.pack()
+
+        # Date of Birth
+        dob_label = tk.Label(new_window, text="Date of Birth:")
+        dob_label.pack()
+        dob_entry = tk.Entry(new_window)
+        dob_entry.pack()
+
+        # Passport Details
+        passport_label = tk.Label(new_window, text="Passport Details:")
+        passport_label.pack()
+        passport_entry = tk.Entry(new_window)
+        passport_entry.pack()
+
+        # Passport Details
+        manager_id = tk.Label(new_window, text="Manager ID:")
+        manager_id.pack()
+        manager_id_entry = tk.Entry(new_window)
+        manager_id_entry.pack()
+
+        # Button to add employee
+        add_button = tk.Button(new_window, text="Add Employee", command=lambda: self.EventManagementSystem.add_employee(
+            selected_job.get(),
+            name_entry.get(),
+            employee_id_entry.get(),
+            department_entry.get(),
+            basic_salary_entry.get(),
+            age_entry.get(),
+            dob_entry.get(),
+            passport_entry.get(),
+            manager_id_entry.get()
+        ))
+        add_button.pack()
+
+        self.output_text.insert(tk.END, "Adding Employee...\n")
+
+    def add_Event_window(self):
+        new_window = tk.Toplevel(self)
+        new_window.geometry("350x600")
+        new_window.title("Add Event")
+
+        # Event ID
+        event_id_label = tk.Label(new_window, text="Event ID:")
+        event_id_label.pack()
+        event_id_entry = tk.Entry(new_window)
+        event_id_entry.pack()
+
+        # Event Type
+        event_type_label = tk.Label(new_window, text="Event Type:")
+        event_type_label.pack()
+        event_type_entry = tk.Entry(new_window)
+        event_type_entry.pack()
+
+        # Theme
+        theme_label = tk.Label(new_window, text="Theme:")
+        theme_label.pack()
+        theme_entry = tk.Entry(new_window)
+        theme_entry.pack()
+
+        # Date
+        date_label = tk.Label(new_window, text="Date:")
+        date_label.pack()
+        date_entry = tk.Entry(new_window)
+        date_entry.pack()
+
+        # Time
+        time_label = tk.Label(new_window, text="Time:")
+        time_label.pack()
+        time_entry = tk.Entry(new_window)
+        time_entry.pack()
+
+        # Duration
+        duration_label = tk.Label(new_window, text="Duration:")
+        duration_label.pack()
+        duration_entry = tk.Entry(new_window)
+        duration_entry.pack()
+
+        # Venue Address
+        venue_label = tk.Label(new_window, text="Venue Address:")
+        venue_label.pack()
+        venue_entry = tk.Entry(new_window)
+        venue_entry.pack()
+
+        # Client ID
+        client_id_label = tk.Label(new_window, text="Client ID:")
+        client_id_label.pack()
+        client_id_entry = tk.Entry(new_window)
+        client_id_entry.pack()
+
+        # Invoice
+        invoice_label = tk.Label(new_window, text="Invoice:")
+        invoice_label.pack()
+        invoice_entry = tk.Entry(new_window)
+        invoice_entry.pack()
+
+        # Button to add event
+        add_button = tk.Button(new_window, text="Add Event", command=lambda: self.EventManagementSystem.add_event(
+            event_id_entry.get(),
+            event_type_entry.get(),
+            theme_entry.get(),
+            date_entry.get(),
+            time_entry.get(),
+            duration_entry.get(),
+            venue_entry.get(),
+            client_id_entry.get(),
+            invoice_entry.get()
+        ))
+        add_button.pack()
+
+        self.output_text.insert(tk.END, "Adding Event...\n")
+
+    def add_Client_window(self):
+        new_window = tk.Toplevel(self)
+        new_window.geometry("350x400")
+        new_window.title("Add Client")
+
+        # Client ID
+        client_id_label = tk.Label(new_window, text="Client ID:")
+        client_id_label.pack()
+        client_id_entry = tk.Entry(new_window)
+        client_id_entry.pack()
+
+        # Name
+        name_label = tk.Label(new_window, text="Name:")
+        name_label.pack()
+        name_entry = tk.Entry(new_window)
+        name_entry.pack()
+
+        # Address
+        address_label = tk.Label(new_window, text="Address:")
+        address_label.pack()
+        address_entry = tk.Entry(new_window)
+        address_entry.pack()
+
+        # Contact Details
+        contact_label = tk.Label(new_window, text="Contact Details:")
+        contact_label.pack()
+        contact_entry = tk.Entry(new_window)
+        contact_entry.pack()
+
+        # Budget
+        budget_label = tk.Label(new_window, text="Budget:")
+        budget_label.pack()
+        budget_entry = tk.Entry(new_window)
+        budget_entry.pack()
+
+        # Button to add client
+        add_button = tk.Button(new_window, text="Add Client", command=lambda: self.EventManagementSystem.add_client(
+            client_id_entry.get(),
+            name_entry.get(),
+            address_entry.get(),
+            contact_entry.get(),
+            budget_entry.get()
+        ))
+        add_button.pack()
+
+        self.output_text.insert(tk.END, "Adding Client...\n")
+
+    def add_Guest_window(self):
+        new_window = tk.Toplevel(self)
+        new_window.geometry("350x400")
+        new_window.title("Add Guest")
+
+        # Guest ID
+        guest_id_label = tk.Label(new_window, text="Guest ID:")
+        guest_id_label.pack()
+        guest_id_entry = tk.Entry(new_window)
+        guest_id_entry.pack()
+
+        # Name
+        name_label = tk.Label(new_window, text="Name:")
+        name_label.pack()
+        name_entry = tk.Entry(new_window)
+        name_entry.pack()
+
+        # Address
+        address_label = tk.Label(new_window, text="Address:")
+        address_label.pack()
+        address_entry = tk.Entry(new_window)
+        address_entry.pack()
+
+        # Contact Details
+        contact_label = tk.Label(new_window, text="Contact Details:")
+        contact_label.pack()
+        contact_entry = tk.Entry(new_window)
+        contact_entry.pack()
+
+        # Button to add guest
+        add_button = tk.Button(new_window, text="Add Guest", command=lambda: self.EventManagementSystem.add_guest(
+            guest_id_entry.get(),
+            name_entry.get(),
+            address_entry.get(),
+            contact_entry.get()
+        ))
+        add_button.pack()
+
+        self.output_text.insert(tk.END, "Adding Guest...\n")
+
+    def add_Supplier_window(self):
+        new_window = tk.Toplevel(self)
+        new_window.geometry("350x500")
+        new_window.title("Add Supplier")
+        self.output_text.insert(tk.END, "Adding Supplier...\n")
+
+        # Dropdown menu for job titles
+        supplier_types = [
+            "catering","decorations",
+            "cleaning","furniture"
+        ]
+        selected_supplier = tk.StringVar(new_window)
+        selected_supplier.set(supplier_types[0])
+        supplier_types_label = tk.Label(new_window, text="Select Supplier Type")
+        supplier_types_label.pack()
+        supplier_dropdown = tk.OptionMenu(new_window, selected_supplier, *supplier_types)
+        supplier_dropdown.pack()
+
+        # Name
+        name_label = tk.Label(new_window, text="Name:")
+        name_label.pack()
+        name_entry = tk.Entry(new_window)
+        name_entry.pack()
+
+        # Address
+        address_label = tk.Label(new_window, text="Address:")
+        address_label.pack()
+        address_entry = tk.Entry(new_window)
+        address_entry.pack()
+
+        # Contact
+        contact_label = tk.Label(new_window, text="Contact:")
+        contact_label.pack()
+        contact_entry = tk.Entry(new_window)
+        contact_entry.pack()
+
+        # Button to add guest
+        add_supplier = tk.Button(new_window, text="Add Supplier", command=lambda: self.EventManagementSystem.add_supplier(
+            selected_supplier.get(),
+            name_entry.get(),
+            address_entry.get(),
+            contact_entry.get()
+        ))
+        add_supplier.pack()
+
+    def display_employees(self):
+        self.output_text.delete('1.0', tk.END)
+        self.output_text.insert(tk.END, "Displaying Employees...\n")
+
+        employees = self.EventManagementSystem.getEmployees()
+        all_details = ""
+        for i in employees:
+            all_details += i.details()
+        self.output_text.insert(tk.END, all_details)
+
+
+    def display_events(self):
+        self.output_text.delete('1.0', tk.END)
+        self.output_text.insert(tk.END, "Displaying Events...\n")
+
+        events = self.EventManagementSystem.getEvents()
+        all_details = ""
+        for i in events:
+            all_details += i.details()
+        self.output_text.insert(tk.END, all_details)
+
+    def display_clients(self):
+        self.output_text.delete('1.0', tk.END)
+        self.output_text.insert(tk.END, "Displaying Clients...\n")
+
+        clients = self.EventManagementSystem.getClients()
+        all_details = ""
+        for i in clients:
+            all_details += i.details()
+        self.output_text.insert(tk.END, all_details)
+
+    def display_guests(self):
+        self.output_text.delete('1.0', tk.END)
+        self.output_text.insert(tk.END, "Displaying Guests...\n")
+
+        guests = self.EventManagementSystem.getGuests()
+        all_details = ""
+        for i in guests:
+            all_details += i.details()
+        self.output_text.insert(tk.END, all_details)
+
+    def display_suppliers(self):
+        self.output_text.delete('1.0', tk.END)
+        self.output_text.insert(tk.END, "Displaying Suppliers...\n")
+
+        suppliers = self.EventManagementSystem.getSuppliers()
+        all_details = ""
+        for i in suppliers:
+            all_details += i.details()
+        self.output_text.insert(tk.END, all_details)
+
+
+        
+if __name__ == "__main__":
+    app = EventManagementApp()
+    app.mainloop()
